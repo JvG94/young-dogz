@@ -1,0 +1,68 @@
+<?php
+
+class View {
+
+    private $data;
+    public $layout = DEFAULT_LAYOUT;
+
+    public function set() {
+        $args = func_get_args();
+        $argsCount = func_num_args();
+        if ($argsCount == 1) {
+            if (is_array($args[0])) {
+                foreach ($args[0] as $key => $value) {
+                    if ($key) {
+                        $this->data[$key] = $value;
+                    }
+                    else {
+                        $this->data[$value] = $value;
+                    }
+                }
+            }
+        }
+        elseif ($argsCount == 2) {
+            $this->data[$args[0]] = $args[1];
+        }
+    }
+
+    public function render($path = null) {
+        if (is_array($this->data)) {
+            foreach ($this->data as $key => $value) {
+                $$key = $value;
+            }
+        }
+
+        if ($path == null) {
+            $backtrace = debug_backtrace();
+            if (isset($backtrace[1])) {
+                $class = str_replace('controller', '', strtolower($backtrace[1]['class']));
+                $path = $class . DS . $backtrace[1]['function'];
+            }
+        }
+
+        $pathToView = ROOT . DS . 'application' . DS . 'views' . DS . $path . DEFAULT_VIEW_EXTENSION;
+        $pathToLayout = ROOT . DS . 'application' . DS . 'views' . DS . 'layouts' . DS . $this->layout . DEFAULT_VIEW_EXTENSION;
+
+        if ($this->layout && file_exists($pathToLayout)) {
+            include ($pathToLayout);
+        }
+        elseif (file_exists($pathToView)) {
+            include ($pathToView);
+        }
+    }
+
+    public function element($path) {
+        if (is_array($this->data)) {
+            foreach ($this->data as $key => $value) {
+                $$key = $value;
+            }
+        }
+
+        $pathToElement = ROOT . DS . 'application' . DS . 'views' . DS . 'elements' . DS . $path . DEFAULT_VIEW_EXTENSION;
+        if (file_exists($pathToElement)) {
+            include ($pathToElement);
+        }
+        
+    }
+
+}

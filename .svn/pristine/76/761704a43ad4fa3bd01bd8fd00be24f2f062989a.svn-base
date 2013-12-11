@@ -1,0 +1,10 @@
+<?php
+
+class PagesController extends Controller {
+    
+    public function index() {
+        $this->view->set('title','test');
+        $this->view->render();
+    }
+    
+}

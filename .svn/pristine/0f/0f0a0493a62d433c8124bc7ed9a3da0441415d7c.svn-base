@@ -1,0 +1,9 @@
+$(document).ready(function() {
+    $('.tabs').tabs();
+    
+    $('.show_debug').click(function() {
+        $('#debug').dialog({
+            width: 800
+        });
+    });
+});

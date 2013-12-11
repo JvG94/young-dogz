@@ -1,0 +1,19 @@
+/* typography */
+
+html { //content font
+	font-family: 'Roboto', sans-serif;
+	line-height: 20px;
+	font-size: 16px;
+}
+
+h1 { //header1 font
+
+}
+
+h2 { //header2 font
+
+}
+
+h3 { //header3 font
+
+}

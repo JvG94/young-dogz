@@ -1,0 +1,7 @@
+test<form method="POST">
+    <label for="email">E-mail</label>
+    <input id="email" type="text" name="email" value="" /><br />
+    <label for="text">Tekst</label>
+    <textarea name="text" id="text"></textarea><br />
+    <input type="submit" value='Verstuur' />
+</form>

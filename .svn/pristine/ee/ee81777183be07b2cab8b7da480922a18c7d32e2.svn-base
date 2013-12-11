@@ -1,0 +1,21 @@
+<form method="POST">
+    <strong>Voornaam:</strong> <input type="text" name="first_name" /><br />
+    <strong>Tussenvoegsel:</strong> <input type="text" name="insertion" /><br />
+    <strong>Achternaam:</strong> <input type="text" name="last_name" /><br />
+    <input type="submit" value="Reserveer" />
+</form>
+
+<div class="content">
+    <form method="POST">
+        <input type="text" name="date" value="" class="datepicker" />
+        <div class="datapicker"></div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.datepicker').datepicker({
+            dateFormat: "dd-mm-yy"
+        });
+    });
+    </script>

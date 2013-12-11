@@ -1,0 +1,26 @@
+<?php
+
+class PagesController extends Controller {
+    
+    public function index() {
+        $this->view->set('title','test');
+        $this->view->render();
+    }
+    
+    
+    public function contact() {
+        if (is('post')) {
+            $email = $_POST['email'];
+            $text = $_POST['email'];
+            if (true) {
+                return $this->redirect('/pages/contact_success');
+            }
+        }
+        return $this->view->render();
+    }
+    
+    public function contact_success() {
+        return $this->view->render();
+    }
+    
+}

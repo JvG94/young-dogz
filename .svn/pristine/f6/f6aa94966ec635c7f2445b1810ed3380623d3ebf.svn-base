@@ -1,0 +1,64 @@
+<?php
+
+class CounterController extends Controller {
+
+    public function index() {
+        if (!isset($_SESSION['order'])) {
+            $_SESSION['order'] = null;
+        }
+        $this->view->set([
+            'items' => $_SESSION['order'],
+            'products' => [
+                [
+                    'id' => 1,
+                    'price' => 2,
+                    'title' => 'Cola'
+                ],
+                [
+                    'id' => 2,
+                    'price' => 2.5,
+                    'title' => 'Bier'
+                ]
+            ]
+        ]);
+        $this->view->render();
+    }
+
+    public function add() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if (isset($_SESSION['order'][$_POST['id']])) {
+                $_SESSION['order'][$_POST['id']]['amount']++;
+            }
+            else {
+                $_SESSION['order'][$_POST['id']] = [
+                    'id' => $_POST['id'],
+                    'amount' => 1,
+                    'title' => $_POST['title'],
+                    'price' => $_POST['price']
+                ];
+            }
+        }
+
+        $this->view->set('items', $_SESSION['order']);
+        $this->view->element('counter/list');
+    }
+
+    public function remove() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if (isset($_SESSION['order'][$_POST['id']])) {
+                $_SESSION['order'][$_POST['id']]['amount']--;
+                if ($_SESSION['order'][$_POST['id']]['amount'] < 1) {
+                    unset($_SESSION['order'][$_POST['id']]);
+                }
+            }
+        }
+
+        $this->view->set('items', $_SESSION['order']);
+        $this->view->element('counter/list');
+    }
+
+    public function delete() {
+        $_SESSION['order'] = array();
+    }
+
+}

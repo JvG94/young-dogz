@@ -1,0 +1,262 @@
+-- phpMyAdmin SQL Dump
+-- version 4.0.4.1
+-- http://www.phpmyadmin.net
+--
+-- Machine: 127.0.0.1
+-- Genereertijd: 11 dec 2013 om 19:45
+-- Serverversie: 5.6.11
+-- PHP-versie: 5.5.1
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+--
+-- Databank: `young-dogz`
+--
+CREATE DATABASE IF NOT EXISTS `young-dogz` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `young-dogz`;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `categories`
+--
+
+CREATE TABLE IF NOT EXISTS `categories` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `categories_id` int(11) DEFAULT NULL,
+  `title` varchar(45) DEFAULT NULL,
+  `description` text,
+  `created` timestamp NULL DEFAULT NULL,
+  `modified` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `menus`
+--
+
+CREATE TABLE IF NOT EXISTS `menus` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `users_id` int(11) NOT NULL,
+  `created` timestamp NULL DEFAULT NULL,
+  `modified` timestamp NULL DEFAULT NULL,
+  `title` varchar(45) DEFAULT NULL,
+  `description` text,
+  `price` double DEFAULT NULL,
+  `active` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`,`users_id`),
+  KEY `fk_menus_users1_idx` (`users_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `menus_courses`
+--
+
+CREATE TABLE IF NOT EXISTS `menus_courses` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `menus_id` int(11) NOT NULL,
+  `order` int(11) DEFAULT NULL,
+  `title` varchar(45) DEFAULT NULL,
+  `description` text,
+  PRIMARY KEY (`id`,`menus_id`),
+  KEY `fk_menus_courses_menus1_idx` (`menus_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `orders`
+--
+
+CREATE TABLE IF NOT EXISTS `orders` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `users_id` int(11) NOT NULL,
+  `created` timestamp NULL DEFAULT NULL,
+  `modfied` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`,`users_id`),
+  KEY `fk_orders_users1_idx` (`users_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `orders_menus`
+--
+
+CREATE TABLE IF NOT EXISTS `orders_menus` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `orders_id` int(11) NOT NULL,
+  `menus_id` int(11) NOT NULL,
+  `price` double DEFAULT NULL,
+  `amount` int(11) NOT NULL,
+  PRIMARY KEY (`id`,`orders_id`,`menus_id`),
+  KEY `fk_orders_menus_orders1_idx` (`orders_id`),
+  KEY `fk_orders_menus_menus1_idx` (`menus_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `orders_products`
+--
+
+CREATE TABLE IF NOT EXISTS `orders_products` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `orders_id` int(11) NOT NULL,
+  `products_id` int(11) NOT NULL,
+  `price` double DEFAULT NULL,
+  `amount` int(11) DEFAULT NULL,
+  PRIMARY KEY (`orders_id`,`products_id`),
+  KEY `fk_orders_has_products_products1_idx` (`products_id`),
+  KEY `fk_orders_has_products_orders1_idx` (`orders_id`),
+  KEY `id` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `products`
+--
+
+CREATE TABLE IF NOT EXISTS `products` (
+  `id` int(11) NOT NULL,
+  `users_id` int(11) NOT NULL,
+  `categories_id` int(11) NOT NULL,
+  `title` varchar(45) DEFAULT NULL,
+  `description` text,
+  `price` double DEFAULT NULL,
+  `created` timestamp NULL DEFAULT NULL,
+  `modified` timestamp NULL DEFAULT NULL,
+  `active` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`,`users_id`,`categories_id`),
+  KEY `fk_products_categories1_idx` (`categories_id`),
+  KEY `fk_products_users1_idx` (`users_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `reservations`
+--
+
+CREATE TABLE IF NOT EXISTS `reservations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `users_id` int(11) NOT NULL,
+  `duration` int(11) DEFAULT NULL,
+  `created` timestamp NULL DEFAULT NULL,
+  `modified` timestamp NULL DEFAULT NULL,
+  `amount` int(11) DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `time` time DEFAULT NULL,
+  `active` tinyint(1) DEFAULT NULL,
+  `status` varchar(45) DEFAULT NULL,
+  `comment` text,
+  PRIMARY KEY (`id`,`users_id`),
+  KEY `fk_reservations_users1_idx` (`users_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=43 ;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `reservations_menus`
+--
+
+CREATE TABLE IF NOT EXISTS `reservations_menus` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `reservations_id` int(11) NOT NULL,
+  `menus_id` int(11) NOT NULL,
+  `comment` text,
+  PRIMARY KEY (`id`,`reservations_id`,`menus_id`),
+  KEY `fk_reservations_menus_reservations2_idx` (`reservations_id`),
+  KEY `fk_reservations_menus_menus1_idx` (`menus_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=257 ;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `schedules`
+--
+
+CREATE TABLE IF NOT EXISTS `schedules` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` date DEFAULT NULL COMMENT 'Date of the schedule.',
+  `created` timestamp NULL DEFAULT NULL,
+  `modified` timestamp NULL DEFAULT NULL,
+  `comment` text COMMENT 'Comments on the day, holidays.',
+  `time_start` time DEFAULT NULL COMMENT 'Time of first reservation possible.',
+  `time_end` time DEFAULT NULL COMMENT 'Time of last reservation possible.',
+  `amount` int(11) DEFAULT NULL COMMENT 'Amount of people for which can be reserved on that day.',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `settings`
+--
+
+CREATE TABLE IF NOT EXISTS `settings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `key` varchar(45) DEFAULT NULL,
+  `value` text,
+  `modified` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `users`
+--
+
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `role` varchar(45) DEFAULT 'default',
+  `created` timestamp NULL DEFAULT NULL,
+  `modified` timestamp NULL DEFAULT NULL,
+  `email` varchar(45) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `hash` varchar(255) DEFAULT NULL,
+  `active` tinyint(1) DEFAULT NULL,
+  `first_name` varchar(45) DEFAULT NULL,
+  `insertion` varchar(45) DEFAULT NULL,
+  `last_name` varchar(45) DEFAULT NULL,
+  `gender` enum('male','female') DEFAULT NULL,
+  `country` varchar(255) NOT NULL,
+  `city` varchar(255) NOT NULL,
+  `postal_code` varchar(255) NOT NULL,
+  `address` varchar(255) NOT NULL,
+  `phone` varchar(255) NOT NULL,
+  `newsletter` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `users_logins`
+--
+
+CREATE TABLE IF NOT EXISTS `users_logins` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `users_id` int(11) NOT NULL,
+  `timestamp` timestamp NULL DEFAULT NULL,
+  `ip` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`,`users_id`),
+  KEY `fk_users_logins_users_idx` (`users_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

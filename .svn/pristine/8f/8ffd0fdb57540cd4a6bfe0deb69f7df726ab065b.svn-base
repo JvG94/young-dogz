@@ -1,0 +1,9 @@
+#container {
+    margin: auto;
+    width: 980px;
+}
+
+th, td {
+    padding: 3px;
+    text-align: left;
+}

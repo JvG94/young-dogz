@@ -1,0 +1,196 @@
+<form method='POST'>
+    <!--E-mail-->
+    <div class="form-group row">
+        <div class='col-md-6'>
+            <div class='input-group'>
+                <span class='input-group-addon'>E-mail</span>                
+                <input type="text" class="form-control" id="email" placeholder="E-mail" value="" />
+            </div>
+            <span class="label label-danger" id="email_alert"></span>
+        </div>
+    </div>    
+    <!--First name-->
+    <div class="form-group row">
+        <div class='col-md-6'>
+            <div class='input-group'>
+                <span class='input-group-addon'>Voornaam</span>                
+                <input type="text" class="form-control" id="firstName" placeholder="Voornaam" value="" />
+            </div>
+            <span class="label label-danger" id="firstName_alert"></span>
+        </div>
+    </div>
+    <!--Insertion-->
+    <div class="form-group row">
+        <div class='col-md-6'>
+            <div class='input-group'>
+                <span class='input-group-addon'>Tussenvoegsel</span>                
+                <input type="text" class="form-control" id="insertion" placeholder="Tussenvoegsel" value="" />
+            </div>
+            <span class="label label-danger" id="insertion_alert"></span>
+        </div>
+    </div>
+    <!--Last name-->
+    <div class="form-group row">
+        <div class='col-md-6'>
+            <div class='input-group'>
+                <span class='input-group-addon'>Achternaam</span>                
+                <input type="text" class="form-control" id="lastName" placeholder="Achternaam" value="" />
+            </div>
+            <span class="label label-danger" id="lastName_alert"></span>
+        </div>
+    </div>
+    <!--Gender-->
+    <div class="form-group row">
+        <div class='col-md-6'>
+            <div class='input-group'>
+                <span class='input-group-addon'>Geslacht</span>                
+                <select id="gender" class="form-control">
+                    <option value="male">Man</option>
+                    <option value="female">Vrouw</option>
+                </select>
+            </div>
+            <span class="label label-danger" id="gender_alert"></span>
+        </div>
+    </div>
+    <!--City-->
+    <div class="form-group row">
+        <div class='col-md-6'>
+            <div class='input-group'>
+                <span class='input-group-addon'>Woonplaats</span>                
+                <input type="text" class="form-control" id="city" placeholder="Woonplaats" value="" />
+            </div>
+            <span class="label label-danger" id="city_alert"></span>
+        </div>
+    </div>
+    <!--Postal code-->
+    <div class="form-group row">
+        <div class='col-md-6'>
+            <div class='input-group'>
+                <span class='input-group-addon'>Postcode</span>                
+                <input type="text" class="form-control" id="postalCode" placeholder="Postcode" value="" />
+            </div>
+            <span class="label label-danger" id="postalCode_alert"></span>
+        </div>
+    </div>
+    <!--Address-->
+    <div class="form-group row">
+        <div class='col-md-6'>
+            <div class='input-group'>
+                <span class='input-group-addon'>Adres</span>                
+                <input type="text" class="form-control" id="address" placeholder="Adres" value="" />
+            </div>
+            <span class="label label-danger" id="address_alert"></span>
+        </div>
+    </div>
+    <!--Phone-->
+    <div class="form-group row">
+        <div class='col-md-6'>
+            <div class='input-group'>
+                <span class='input-group-addon'>Telefoonnummer</span>                
+                <input type="text" class="form-control" id="phone" placeholder="Telefoonnummer" value="" />
+            </div>
+            <span class="label label-danger" id="phone_alert"></span>
+        </div>
+    </div>
+    <!--Newsletter-->
+    <div class="form-group row">
+        <div class='col-md-6'>
+            <div class='input-group'>
+                <span class='input-group-addon'>Nieuwsbrief</span>
+                <select id="newsletter" class="form-control">
+                    <option value="0">Ik wil geen nieuwsbrieven ontvangen</option>
+                    <option value="1">Ik wil wel nieuwsbrieven ontvangen</option>
+                </select>
+            </div>
+            <span class="label label-danger" id="newsletter_alert"></span>
+        </div>
+    </div>    
+    <input type='button' id="submit" class="btn btn-primary" value='Registreer' /> Alle velden zijn vereist.
+</form>
+<script type="text/javascript">
+    $(document).ready(function() {
+        
+        $('#email').change(function() {
+            if (validateEmail($('#email').val())) {
+                $('#email_alert').html('');
+            }
+            else {
+                $('#email_alert').html('Ongeldig e-mailadres.');
+            }
+        });
+        
+        $('#submit').click(function() {
+            var data = {
+                email: $('#email').val(),
+                firstName: $('#firstName').val(),
+                insertion: $('#insertion').val(),
+                lastName: $('#lastName').val(),
+                gender: $('#gender').val(),
+                city: $('#city').val(),
+                postalCode: $('#postalCode').val(),
+                address: $('#address').val(),
+                phone: $('#phone').val(),
+                newsletter: $('#newsletter').val()
+            };
+
+            var error = false;
+
+            if (data['email'].length <= 0 || !validateEmail(data['email'])) {
+                $('#email_alert').html('Ongeldig e-mailadres.');
+                error = true;
+            }
+            
+            if (data['firstName'].length <= 0) {
+                $('#firstName_alert').html('Ongeldige voornaam.');
+                error = true;
+            }            
+            
+            if (data['insertion'].length <= 0) {
+                $('#insertion_alert').html('Ongeldige tussenvoegsel.');
+                error = true;
+            }
+            
+            if (data['lastName'].length <= 0) {
+                $('#lastName_alert').html('Ongeldige achternaam.');
+                error = true;
+            }
+            
+            if (data['gender'].length <= 0 || (data['gender'] !== 'male' && data['gender'] !== 'female')) {
+                $('#gender_alert').html('Ongeldige geslacht.');
+                error = true;
+            }
+            
+            if (data['city'].length <= 0) {
+                $('#city_alert').html('Ongeldige woonplaats.');
+                error = true;
+            }
+            
+            if (data['postalCode'].length <= 0) {
+                $('#postalCode_alert').html('Ongeldige postcode.');
+                error = true;
+            }
+            
+            if (data['address'].length <= 0) {
+                $('#address_alert').html('Ongeldige adres.');
+                error = true;
+            }
+            
+            if (data['phone'].length <= 0) {
+                $('#phone_alert').html('Ongeldige telefoonnummer.');
+                error = true;
+            }
+
+
+            if (error === false) {
+                $.ajax({
+                    type: 'POST',
+                    data: data,
+                    async: false,
+                    success: function(response) {
+                        alert('Under construction fagget');
+                    }
+                });
+            }
+        });
+    });
+</script>

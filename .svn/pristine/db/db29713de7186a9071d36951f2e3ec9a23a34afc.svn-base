@@ -1,0 +1,38 @@
+/*navigationbar*/
+
+.adminbar {
+	position: fixed;
+	height: 50px;
+	width: 100%;
+	background-image: -webkit-gradient(linear, center top, center bottom, from(#404040), to(#292929));
+	background-image: -webkit-linear-gradient(top, #404040, #292929);
+	background-image: -moz-linear-gradient(top, #404040, #292929);
+	background-image: -o-linear-gradient(top, #404040, #292929);
+	background-image: -ms-linear-gradient(top, #404040, #292929);
+	background-image: linear-gradient(to bottom, #404040, #292929);
+}
+
+.adminbar-li {
+    display: inline-block;
+	margin-top: 13px;
+
+    a {
+    	color: #f4f4f4;
+	    padding: 3px 5px;
+	    border: 1px solid #222222;
+	    border-radius: 3px;
+	    -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,0.25);
+		-moz-box-shadow: inset 0 1px 0 rgba(255,255,255,0.25);
+		box-shadow: inset 0 1px 0 rgba(255,255,255,0.25);
+    }
+
+    a:hover {
+    	text-decoration: none;
+   		background-image: -webkit-gradient(linear, center top, center bottom, from(#545454), to(#292929));
+		background-image: -webkit-linear-gradient(top, #545454, #292929);
+		background-image: -moz-linear-gradient(top, #545454, #292929);
+		background-image: -o-linear-gradient(top, #545454, #292929);
+		background-image: -ms-linear-gradient(top, #545454, #292929);
+		background-image: linear-gradient(to bottom, #545454, #292929);
+    }
+}

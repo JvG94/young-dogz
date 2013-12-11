@@ -1,0 +1,168 @@
+<h1>Reserveren <label class='label label-danger' id="response"></label></h1><br />
+<form method="POST">
+    <!--Date-->
+    <div class="form-group row">
+        <div class='col-md-6'>
+            <div class='input-group'>
+                <span class='input-group-addon'>Datum</span>                
+                <input type="text" class="form-control" id="date" placeholder="Datum" value="" readonly='readonly' />
+            </div>
+            <span id='date_alert' class="label label-danger"></span>
+        </div>
+    </div>
+    <!--Time-->
+    <div class="form-group row">
+        <div class='col-md-6'>
+            <div class='input-group'>
+                <span class='input-group-addon'>Tijd</span>
+                <select class='form-control' id='time' disabled='disabled'>
+                </select>
+            </div>
+            <span id='time_alert' class="label label-danger"></span>
+        </div>
+    </div>
+    <!--Duration-->
+    <div class="form-group row">
+        <div class='col-md-6'>
+            <div class='input-group'>
+                <span class='input-group-addon'>Lengte</span>
+                <select id="duration"class="form-control" disabled='disabled'>
+                    <?php for ($i = HOUR; $i <= HOUR * 3; $i += INTERVAL): ?>
+                        <option value="<?php echo $i; ?>"><?php echo date('H:i', $i); ?></option>
+                    <?php endfor; ?>
+                </select>
+            </div>
+            <span id='duration_alert' class="label label-danger"></span>
+        </div>
+    </div>
+    <!--Amount-->
+    <div class="form-group row">
+        <div class='col-md-6'>
+            <div class='input-group'>
+                <span class='input-group-addon'>Aantal personen</span>
+                <input type="text" class="form-control" id="amount" disabled='disabled' placeholder="Aantal personen" value="<?php echo MIN_PEOPLE_BOOKING; ?>" data-value='<?php echo MIN_PEOPLE_BOOKING; ?>' />  
+            </div>
+            <span id='amount_alert' class="label label-danger"></span>
+        </div>
+    </div>
+    <!--Available spots-->
+    <div class="form-group row">
+        <div class='col-md-6'>
+            <div class='input-group'>
+                <span class='input-group-addon'>Plekken over</span>
+                <input type="text" disabled='disabled' class="form-control" id="availableSpots" placeholder="Plekken over" value="" />  
+            </div>
+        </div>
+    </div>
+    <input type='submit' value='Controleer' id="submit" style="display: none;" class='submit btn btn-primary' />
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#date').datepicker({
+            dateFormat: "dd-mm-yy",
+            minDate: 0
+        });
+
+        $('#date').change(function() {
+            // If the date is changed get the new first and last possible reservation times and change the maximum amount of people that can reserve.
+            $.ajax({
+                url: 'reservations/json_get_schedule',
+                type: 'POST',
+                dataType: ' json',
+                async: false,
+                data: {
+                    date: $(this).val()
+                },
+                success: function(response) {
+                    // Reformat the time select.
+                    $('#time').children().remove();
+                    $.each(response['times'], function(key, value) {
+                        $('#time').append('<option value="' + key + '">' + value + '</option>');
+                    });
+
+                    $('#amount, #time, #duration').removeAttr('disabled');
+                }
+            });
+        });
+
+        $('#amount').keyup(function() {
+            // If the value isn't an integer return false;
+            if (!$.isNumeric(Math.floor($(this).val()))) {
+                $('#amount').val(0);
+            }
+
+            validateAmount($('#amount').val(), $('#availableSpots').val());
+        });
+        
+        function validateAmount(amount, spots) { 
+            spots = parseInt(spots);
+            amount = parseInt(amount);
+            
+            // If the amount of people booked is below the minimum
+            if (amount < <?php echo MIN_PEOPLE_BOOKING; ?>) {
+                $('#amount_alert').html('Een reservering moet uit minimaal <?php echo MIN_PEOPLE_BOOKING; ?> personen bestaan.');
+                $('#submit').hide();
+            }
+            else if (spots < amount) {
+                $('#amount_alert').html('Er zijn maar ' + spots + ' plaatsen beschikbaar.');
+                $('#submit').hide();
+            }
+            else {
+                $('#amount_alert').html('');
+                $('#submit').show();
+            }
+        }
+
+        $('#date, #time, #duration, #amount').change(function() {
+            var date = $('#date').val();
+            var time = $('#time').val();
+            var duration = $('#duration').val();
+            var amount = $('#amount').val();
+
+            if (date && time && duration && amount) {
+                $.ajax({
+                    url: 'reservations/json_get_available_spots',
+                    async: false,
+                    dataType: 'json',
+                    data: {
+                        date: date,
+                        time: time,
+                        duration: duration
+                    },
+                    type: 'POST',
+                    success: function(response) {
+                        $('#availableSpots').val(response['spots']);
+                        validateAmount($('#amount').val(), response['spots']);
+                    }
+                });
+            }
+        });
+
+        $('.submit').click(function() {
+            $.ajax({
+                url: 'reservations/add_availablity',
+                async: false,
+                data: {
+                    amount: $('#amount').val(),
+                    date: $('#date').val(),
+                    time: $('#time').val(),
+                    duration: $('#duration').val()
+                },
+                type: 'POST',
+                success: function(response) {
+                    try {
+                        var json = $.parseJSON(response);
+                        if (json['error']) {
+                            $('.response').html('Datum en tijd is niet beschikbaar');
+                        }
+                    }
+                    catch (e) {
+                        $('.content').html(response);
+                    }
+                }
+            })
+            return false;
+        });
+    });
+</script>

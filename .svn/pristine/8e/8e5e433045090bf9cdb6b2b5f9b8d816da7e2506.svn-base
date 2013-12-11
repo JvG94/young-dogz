@@ -1,0 +1,159 @@
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+/* line 17, ../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+
+/* line 22, ../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+html {
+  line-height: 1;
+}
+
+/* line 24, ../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+ol, ul {
+  list-style: none;
+}
+
+/* line 26, ../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* line 28, ../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+caption, th, td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+/* line 30, ../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+q, blockquote {
+  quotes: none;
+}
+/* line 103, ../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+q:before, q:after, blockquote:before, blockquote:after {
+  content: "";
+  content: none;
+}
+
+/* line 32, ../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+a img {
+  border: none;
+}
+
+/* line 116, ../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
+  display: block;
+}
+
+/* import all base styles */
+/* typography */
+/* line 3, ../sass/bontemps/base/_typography.scss */
+html {
+  font-family: 'Roboto', sans-serif;
+  line-height: 20px;
+  font-size: 16px;
+}
+
+/* columns */
+/* line 4, ../sass/bontemps/base/_columns.scss */
+.container {
+  max-width: 1000px;
+  margin: auto;
+}
+
+/* color */
+/* line 3, ../sass/bontemps/base/_colors.scss */
+body {
+  background-color: #f0efed;
+}
+
+/* all layout */
+/* login */
+/* line 3, ../sass/bontemps/layout/_login.scss */
+.login {
+  float: right;
+}
+/* line 6, ../sass/bontemps/layout/_login.scss */
+.login div {
+  display: inline;
+}
+
+/* header */
+/* line 7, ../sass/bontemps/layout/_header.scss */
+.header-image {
+  height: 250px;
+  background: url("../img/background-header.jpg") no-repeat center top fixed;
+  -webkit-background-size: 100%;
+  -moz-background-size: 100%;
+  -o-background-size: 100%;
+  background-size: 100%;
+}
+
+/* line 16, ../sass/bontemps/layout/_header.scss */
+.logo-image {
+  background: url("../img/logo.png") no-repeat center bottom;
+  width: 535px;
+  height: 111px;
+  display: block;
+  margin: auto;
+}
+
+/* navigation */
+/* line 4, ../sass/bontemps/layout/_navigation.scss */
+.navbar {
+  height: 50px;
+  width: 100%;
+  background-color: rgba(62, 62, 62, 0.7);
+  margin-top: -50px;
+  -webkit-box-shadow: 0 3px 0 #262626, inset 0 3px 0 rgba(82, 82, 82, 0.75);
+  -moz-box-shadow: 0 3px 0 #262626, inset 0 3px 0 rgba(82, 82, 82, 0.75);
+  box-shadow: 0 3px 0 #262626, inset 0 3px 0 rgba(82, 82, 82, 0.75);
+}
+
+/* line 15, ../sass/bontemps/layout/_navigation.scss */
+.main-navigation-item {
+  display: inline;
+}
+/* line 18, ../sass/bontemps/layout/_navigation.scss */
+.main-navigation-item a {
+  color: #FFFFFF;
+  display: inline-block;
+  height: 53px;
+  line-height: 53px;
+  text-align: center;
+  text-decoration: none;
+  width: 100px;
+}
+
+/* line 30, ../sass/bontemps/layout/_navigation.scss */
+.main-navigation-item a:hover {
+  text-decoration: underline;
+}
+
+/*content*/
+/* line 3, ../sass/bontemps/layout/_content.scss */
+.content {
+  margin-top: 50px;
+}

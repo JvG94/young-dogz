@@ -1,0 +1,53 @@
+<?php
+
+require_once(ROOT . DS . 'config' . DS . 'app.php');
+require_once(ROOT . DS . 'config' . DS . 'database.php');
+require_once(ROOT . DS . 'config' . DS . 'email.php');
+require_once(ROOT . DS . 'config' . DS . 'routing.php');
+
+error_reporting(E_ALL);
+ini_set('log_errors','On');
+
+if (DEBUG) {
+    ini_set('display_errors','On');
+    ini_set('error_log', ROOT . DS . 'tmp' . DS . 'logs' . DS . 'error_debug.log');
+}
+else {
+    ini_set('display_errors','Off');
+    ini_set('error_log', ROOT . DS . 'tmp' . DS . 'logs' . DS . 'error.log');
+}
+
+function __autoload($class) {
+    if (file_exists(ROOT . DS . 'application' . DS . 'controllers' . DS . $class . '.php')) {
+        include ROOT . DS . 'application' . DS . 'controllers' . DS . $class . '.php';
+    }
+    elseif (file_exists(ROOT . DS . 'application' . DS . 'models' . DS . $class . '.php')) {
+        include ROOT . DS . 'application' . DS . 'models' . DS . $class . '.php';
+    }
+    elseif (file_exists(ROOT . DS . 'library' . DS . $class . '.php')) {
+        include ROOT . DS . 'library' . DS . $class . '.php';
+    }
+    echo ROOT . DS . 'library' . DS . $class;
+}
+
+function debug($variable) {
+    $backtrace = debug_backtrace();
+    echo $backtrace[0]['file'] . '(' . $backtrace[0]['line'] . ')<br /><pre>';
+    print_r($variable);
+    echo '</pre>';
+}
+
+function run() {
+    $url = array();
+    $url = explode('/', isset($_GET['params']) ? $_GET['params'] : '');
+    
+    
+}
+
+run();
+
+$db = Database::instance();
+
+$user = new UserModel();
+debug($user);
+debug($db);

@@ -1,0 +1,14 @@
+<?php
+
+class OrderModel extends Model {
+
+    protected $usersId, $created, $modified;
+    protected $_table = 'orders';
+    protected $_fields = array(
+        'id' => 'id',
+        'users_id' => 'usersId',
+        'created' => 'created',
+        'modified' => 'modified'
+    );
+    
+}

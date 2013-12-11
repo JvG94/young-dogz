@@ -1,0 +1,71 @@
+<?php
+
+class Model {
+
+    public $id;
+    private $_db;
+
+    public function __construct($id = null) {
+        $this->_db = Database::instance();
+        if ($id) {
+            return $this->find($id);
+        }
+    }
+
+    public function find($options = array()) {
+        if (!is_array($options)) {
+            $id = $options;
+            $options = array();
+            $options['conditions'] = array(
+                'id' => $id
+            );
+        }
+        $conditions = array();
+        foreach ($options['conditions'] as $field => $value) {
+            $conditions[] = '`' . array_search($field, $this->_fields) . '` = "' . $value . '"';
+        }
+
+        $query = $this->_db->query('SELECT * FROM `' . $this->_table . '` WHERE ' . implode(' && ', $conditions));
+        if ($query) {
+            if ($query->num_rows) {
+                foreach ($query->fetch_assoc() as $databaseName => $value) {
+                    $modelName = $this->_fields[$databaseName];
+                    $this->$modelName = $value;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function create() {
+        if ($this->_db->query('INSERT INTO `' . $this->table . '` SET `created` = `' . date('Y-m-d H:i:s') . '`')) {
+            $this->id = $this->_db->insert_id;
+            return true;
+        }
+        return false;
+    }
+
+    public function delete() {
+        if ($this->id && $this->_db->query('DELETE FROM `' . $this->table . '` WHERE `id` = ' . $this->id)) {
+            return true;
+        }
+        return false;
+    }
+
+    public function update() {
+        $fields = array();
+        foreach ($this->_fields as $databaseName => $fieldName) {
+            $fields[] = '`' . $databaseName . '` = "' . $this->$fieldname . '"';
+        }
+
+        if ($this->_db->query('UPDATE `' . $this->_table . '` SET ' . implode(', ', $fields))) {
+            return true;
+        }
+        return false;
+    }
+
+    public function getId() {
+        return $this->id;
+    }
+}

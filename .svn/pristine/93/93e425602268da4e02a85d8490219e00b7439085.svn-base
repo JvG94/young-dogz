@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>
+			<link href="stylesheets/screen.css" rel="stylesheet" type="text/css" />
+		</title>
+	</head>
+	<body>
+		<header>
+			<ul>
+				<li></li>
+			</ul>
+		</header>
+		<div class="container">
+			<!--content-->
+		</div>
+	</body>
+</html>

@@ -1,0 +1,4 @@
+<?php
+
+// Set debug to 1 when debugging else set it to 0
+define('DEBUG', 1);

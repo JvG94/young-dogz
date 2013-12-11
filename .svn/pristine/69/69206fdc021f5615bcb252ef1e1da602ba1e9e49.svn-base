@@ -1,0 +1,168 @@
+<h1>Reserveren <label class='label label-danger' id="response"></label></h1><br />
+<form method="POST">
+    <!--Date-->
+    <div class="form-group row">
+        <div class='col-md-6'>
+            <div class='input-group'>
+                <span class='input-group-addon'>Datum</span>                
+                <input type="text" class="form-control" id="date" placeholder="Datum" value="<?php echo date('d-m-Y'); ?>" />
+            </div>
+            <span id='date_alert' class="label label-danger"></span>
+        </div>
+    </div>
+    <!--Time-->
+    <div class="form-group row">
+        <div class='col-md-6'>
+            <div class='input-group'>
+                <span class='input-group-addon'>Tijd</span>
+                <select class='form-control' id='time'>
+                    <?php foreach ($times as $key => $value): ?>
+                        <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <span id='time_alert' class="label label-danger"></span>
+        </div>
+    </div>
+    <!--Duration-->
+    <div class="form-group row">
+        <div class='col-md-6'>
+            <div class='input-group'>
+                <span class='input-group-addon'>Lengte</span>
+                <select id="duration"class="form-control">
+                    <?php for ($i = HOUR; $i <= HOUR * 3; $i += INTERVAL): ?>
+                        <option value="<?php echo $i; ?>"><?php echo date('H:i', $i); ?></option>
+                    <?php endfor; ?>
+                </select>
+            </div>
+            <span id='duration_alert' class="label label-danger"></span>
+        </div>
+    </div>
+    <!--Amount-->
+    <div class="form-group row">
+        <div class='col-md-6'>
+            <div class='input-group'>
+                <span class='input-group-addon'>Aantal personen</span>
+                <input type="text" class="form-control" id="amount" placeholder="Aantal personen" value="<?php echo MIN_PEOPLE_BOOKING; ?>" data-value='<?php echo MIN_PEOPLE_BOOKING; ?>' />  
+            </div>
+            <span id='amount_alert' class="label label-danger"></span>
+        </div>
+    </div>
+    <input type='submit' value='Controleer' id="submit" style="display: none;" class='submit btn btn-primary' />
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var maxAmount = <?php echo $amountMax; ?>;
+
+        $('#date').datepicker({
+            dateFormat: "dd-mm-yy",
+            minDate: 0,
+            constrainInput: true
+        });
+
+        $('#date').change(function() {
+            // If the date is changed get the new first and last possible reservation times and change the maximum amount of people that can reserve.
+            $.ajax({
+                url: 'reservations/get_schedule',
+                type: 'POST',
+                dataType: ' json',
+                async: false,
+                data: {
+                    date: $(this).val()
+                },
+                success: function(response) {
+                    // Reformat the time select.
+                    $('#time').children().remove();
+                    $.each(response[0], function(key, value) {
+                        $('#time').append('<option value="' + key + '">' + value + '</option>');
+                    });
+                    maxAmount = response[1];
+                    if ($('#amount').val() > maxAmount) {
+                        $('#amount').val($('#amount').attr('data-value'));
+                    }
+                    $('#amount_alert').html('');
+                }
+            });
+        });
+
+        $('#amount').change(function() {
+            // Only allow integers. No doubles or floats.
+            $(this).val(Math.floor($(this).val()));
+
+            // If the value isn't an numeric value, reset the value.
+            if (!$.isNumeric($(this).val())) {
+                $(this).val($(this).attr('data-value'));
+            }
+
+            // If the amount of people booked is below the minimum
+            if ($(this).val() < <?php echo MIN_PEOPLE_BOOKING; ?>) {
+                $('#amount_alert').html('Een reservering moet uit minimaal <?php echo MIN_PEOPLE_BOOKING; ?> personen bestaan.');
+            }
+            else if ($(this).val() > maxAmount) {
+                $('#amount_alert').html('Een reservering max uit maximaal ' + maxAmount + ' personen bestaan.')
+            }
+            else {
+                $('#amount_alert').html('');
+            }
+        });
+
+        $('#date, #time, #duration, #amount').change(function() {
+            var date = $('#date').val();
+            var time = $('#time').val();
+            var duration = $('#duration').val();
+            var amount = $('#amount').val();
+
+            if (date && time && duration && amount) {
+                $.ajax({
+                    url: 'reservations/get_availability',
+                    async: false,
+                    dataType: 'json',
+                    data: {
+                        amount: amount,
+                        date: date,
+                        time: time,
+                        duration: duration
+                    },
+                    type: 'POST',
+                    success: function(response) {
+                        if (response['success'] === true) {
+                            $('#response').html('');
+                            $('#submit').show();
+                        }
+                        else {
+                            $('#response').html('Deze datum en tijd is niet beschikbaar');
+                            $('#submit').hide();
+                        }
+                    }
+                })
+            }
+        });
+
+        $('.submit').click(function() {
+            $.ajax({
+                url: 'reservations/add_availablity',
+                async: false,
+                data: {
+                    amount: $('#amount').val(),
+                    date: $('#date').val(),
+                    time: $('#time').val(),
+                    duration: $('#duration').val()
+                },
+                type: 'POST',
+                success: function(response) {
+                    try {
+                        var json = $.parseJSON(response);
+                        if (json['error']) {
+                            $('.response').html('Datum en tijd is niet beschikbaar');
+                        }
+                    }
+                    catch (e) {
+                        $('.content').html(response);
+                    }
+                }
+            })
+            return false;
+        });
+    });
+</script>

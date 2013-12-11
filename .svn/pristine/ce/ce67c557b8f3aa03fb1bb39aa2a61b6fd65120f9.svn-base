@@ -1,0 +1,60 @@
+<?php
+
+class Model {
+
+    public $id;
+    private $_mysqli;
+
+    public function __construct() {
+        $this->_mysqli = $mysqli;
+    }
+
+    public function find($options = array()) {
+        if (is_array(!$options)) {
+            $options['conditions'] = array(
+                'id' => $options
+            );
+        }
+
+        $conditions = array();
+        foreach ($options['conditions'] as $field => $value) {
+            $conditions[] = '`' . $this->$field . '` = "' . $value . '"';
+        }
+
+        $query = $this->_mysqli->query('SELECT FROM `' . $this->_table . '` WHERE ' . implode('&&', $conditions));
+        if ($query) {
+            if ($query->num_rows) {
+                return $query->fetch_object(__CLASS__);
+            }
+        }
+        return false;
+    }
+
+    public function create() {
+        if ($this->_mysqli->query('INSERT INTO `' . $this->table . '` SET `created` = `' . date('Y-m-d H:i:s') . '`')) {
+            $this->id = $this->_mysqli->insert_id;
+            return true;
+        }
+        return false;
+    }
+
+    public function delete() {
+        if ($this->id && $this->_mysqli->query('DELETE FROM `' . $this->table . '` WHERE `id` = ' . $this->id)) {
+            return true;
+        }
+        return false;
+    }
+
+    public function update() {
+        $fields = array();
+        foreach ($this->_fields as $databaseName => $fieldName) {
+            $fields[] = '`' . $databaseName . '` = "' . $this->$fieldname . '"';
+        }
+
+        if ($this->_mysqli->query('UPDATE `' . $this->_table . '` SET ' . implode(', ', $fields))) {
+            return true;
+        }
+        return false;
+    }
+
+}

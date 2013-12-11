@@ -1,0 +1,30 @@
+<?php
+/**
+ * Call the database class with <b>Database::instance();</b>.
+ */
+class Database {
+
+    protected $_db;
+    
+    private function __construct() {
+        $this->_db = new mysqli(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
+    }
+
+    /**
+     * Returns the database class if it exists else creates a new one and returns it.
+     * @staticvar null $instance
+     * @return \Database
+     */
+    public static function instance() {
+        static $instance = null;
+        if ($instance === null) {
+            $instance = new Database();
+        }
+        return $instance;
+    }
+    
+    public function query($sql) {
+        return $this->_db->query($sql);
+    }
+
+}

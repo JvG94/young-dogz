@@ -1,0 +1,16 @@
+<?php
+
+class ReservationsController extends Controller {
+    
+    public function index() {
+        $this->view->render();
+    }
+    
+    public function add() {
+        if (is('post')) {
+            debug($_POST);
+        }
+        
+        $this->view->render();
+    }
+}

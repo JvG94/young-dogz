@@ -1,0 +1,16 @@
+<?php
+
+class UsersController extends Controller {
+
+    public function index() {
+        $this->view->set(array(
+            'users' => array(
+                'test','test2'
+                
+            )
+        ));
+        $this->view->render();
+    }
+    
+    
+}

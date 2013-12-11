@@ -1,0 +1,19 @@
+<?php
+
+class Database {
+
+    protected $_db;
+    
+    private function __construct() {
+        $this->_db = new mysqli(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
+    }
+
+    public static function instance() {
+        static $instance = null;
+        if ($instance === null) {
+            $instance = new Database();
+        }
+        return $instance;
+    }
+
+}

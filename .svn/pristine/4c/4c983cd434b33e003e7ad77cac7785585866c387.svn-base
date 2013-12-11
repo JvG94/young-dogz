@@ -1,0 +1,79 @@
+<?php
+
+/**
+ * Automatically include the correct files for the class. Searches different folders:
+ * - library/
+ * - application/controllers/
+ * - application/models/
+ * 
+ * @param string $class
+ */
+function __autoload($class) {
+    // Library folder.
+    if (file_exists(ROOT . DS . 'library' . DS . $class . '.php')) {
+        include ROOT . DS . 'library' . DS . $class . '.php';
+    }
+    // Controllers folder.
+    elseif (file_exists(ROOT . DS . 'application' . DS . 'controllers' . DS . $class . '.php')) {
+        include ROOT . DS . 'application' . DS . 'controllers' . DS . $class . '.php';
+    }
+    // Models folder.
+    elseif (file_exists(ROOT . DS . 'application' . DS . 'models' . DS . $class . '.php')) {
+        include ROOT . DS . 'application' . DS . 'models' . DS . $class . '.php';
+    }
+}
+
+/**
+ * Prints the given parameter correctly. Including the origin from where the function is called.
+ * This includes the line number and the file.
+ * @param mixed $variable
+ */
+function debug($variable) {
+    // Get the origin from which the function is called.
+    $backtrace = debug_backtrace();
+    echo $backtrace[0]['file'] . '(' . $backtrace[0]['line'] . ')<br /><pre>';
+    print_r($variable);
+    echo '</pre>';
+}
+
+/**
+ * Get an parameter from the url. If the user is currently in the backend, the second parameter
+ * will have an influence on how the function works. If actual is false and the user is currently
+ * in the backend the parameter after the backend_prefix will be given and not the first. 
+ * @param int $index = 0
+ * @param bool $actual = false
+ * @return string
+ */
+function get_param($index = 0, $actual = false) {
+    $url = explode('/', isset($_GET['params']) ? $_GET['params'] : '');
+    // If the actual parameter is wanted and not the parameter relative to the admin prefix or if the user isn't currently in the backend.
+    if ($actual || $url[0] != BACKEND_PREFIX) {
+        return isset($url[$index]) ? $url[$index] : false;
+    }
+    else {
+        // If the user is in the backend return the parameter relative to the backend prefix.
+        return isset($url[$index + 1]) ? $url[$index + 1] : false;
+    }
+}
+
+/**
+ * Check for different requests.
+ * AJAX, POST.
+ * @param string $type
+ * @return bool
+ */
+function is($type) {
+    // Check for different requests.
+    switch (strtolower($type)) {
+        case 'ajax':
+            return !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+            break;
+        case 'post':
+            return $_SERVER['REQUEST_METHOD'] == 'POST';
+            break;
+    }
+}
+
+function encrypt($variable) {
+    return md5($variable);
+}

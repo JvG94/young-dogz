@@ -1,0 +1,9 @@
+/* login */
+
+.login {
+	float:right;
+}
+
+.login div {
+    display: inline;
+}

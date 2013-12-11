@@ -1,0 +1,29 @@
+<?php
+
+function __autoload($class) {
+    if (file_exists(ROOT . DS . 'library' . DS . $class . '.php')) {
+        include ROOT . DS . 'library' . DS . $class . '.php';
+    }
+    elseif (file_exists(ROOT . DS . 'application' . DS . 'controllers' . DS . $class . '.php')) {
+        include ROOT . DS . 'application' . DS . 'controllers' . DS . $class . '.php';
+    }
+    elseif (file_exists(ROOT . DS . 'application' . DS . 'models' . DS . $class . '.php')) {
+        include ROOT . DS . 'application' . DS . 'models' . DS . $class . '.php';
+    }
+}
+
+function debug($variable) {
+    $backtrace = debug_backtrace();
+    echo $backtrace[0]['file'] . '(' . $backtrace[0]['line'] . ')<br /><pre>';
+    print_r($variable);
+    echo '</pre>';
+}
+
+function get_param($index = 0) {
+    $url = explode('/', isset($_GET['params']) ? $_GET['params'] : '');
+    return isset($url[$index]) ? $url[$index] : false;
+}
+
+function is_ajax() {
+    return !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+}

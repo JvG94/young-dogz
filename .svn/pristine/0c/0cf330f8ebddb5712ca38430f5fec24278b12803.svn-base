@@ -1,0 +1,13 @@
+<form method='POST'>
+    E-mail <input type='text' name='email' /><br />
+    Voornaam <input type='text' name='firstName' /><br />
+    Tussenvoegsel <input type='text' name='insertion' /><br />
+    Achternaam <input type='text' name='lastName' /><br />
+    Geslacht <input type='radio' name='gender' value='m' /> Man <input type='radio' name='gender' value='v' /> Vrouw<br />
+    Woonplaats <input type='text' name='city' /><br />
+    Postcode <input type='text' name='postalCode' /><br />
+    Adres <input type='text' name='address' /><br />
+    Telefoonnummer <input type='text' name='phone' /><br />
+    Nieuwsbrief <input type='checkbox' name='newsletter' /><br />
+    <input type='submit' value='Registreer' />
+</form>

@@ -1,0 +1,22 @@
+/* header */
+
+.header {
+
+}
+
+.header-image {
+	height: 250px;;
+	background: url('../img/background-header.jpg') no-repeat center top fixed;
+	-webkit-background-size: 100%;
+	-moz-background-size: 100%;
+	-o-background-size: 100%;
+	background-size: 100%;
+}
+
+.logo-image {
+	background: url('../img/logo.png') no-repeat center bottom;
+	width: 535px;
+	height: 111px;
+	display: block;
+	margin:auto;
+}

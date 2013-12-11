@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><?= $title; ?></title>
+        <base href="http://young-dogz.localhost" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">        
+        <link href="css/jquery-ui.css" rel="stylesheet" type="text/css" />
+        <link href="css/default.css" rel="stylesheet" type="text/css" />
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+    </head>
+    <body>
+        <?php $this->element('users/login'); ?>
+        <div id="container">
+            <?php
+            if (file_exists($pathToView)) {
+                include($pathToView);
+            }
+            ?>
+        </div>
+        <div id="dialog" title='Dialog'>
+        </div>
+    </body>
+</html>

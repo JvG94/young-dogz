@@ -1,0 +1,16 @@
+<?php
+
+class Controller {
+
+    public $view;
+
+    public function __construct() {
+        $this->view = new View();
+        $this->view->set('title', ucwords(str_replace('controller','',strtolower(get_called_class()))));
+    }
+
+    public function redirect($url = "") {
+        echo '<script type="text/javascript">window.location.href="' . $url . '";</script>';
+    }
+
+}

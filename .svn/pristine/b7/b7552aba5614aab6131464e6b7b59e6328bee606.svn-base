@@ -1,0 +1,18 @@
+<?php
+
+class UserModel extends Model {
+    
+    protected $firstName;
+    
+    protected $_table = 'users';
+    protected $_fields = array(
+        'id' => 'id',
+        'first_name' => 'firstName',
+    );
+    
+    public function getFirstName() {
+        return $this->firstName;
+    }
+    
+    
+}

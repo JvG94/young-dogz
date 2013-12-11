@@ -1,0 +1,10 @@
+<?php
+
+// Set debug to 1 when debugging else set it to 0
+define('DEBUG', 1);
+
+define('DEFAULT_CONTROLLER', 'pages');
+define('DEFAULT_METHOD', 'index');
+define('DEFAULT_LAYOUT', 'default');
+define('DEFAULT_VIEW_EXTENSION', '.php');
+define('BACKEND_PREFIX', 'admin');

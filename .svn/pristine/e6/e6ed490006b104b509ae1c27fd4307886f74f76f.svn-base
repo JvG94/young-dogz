@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><?= $title; ?></title>
+        <base href="http://young-dogz.localhost" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">        
+        <link href='http://fonts.googleapis.com/css?family=Roboto:400,500,700' rel='stylesheet' type='text/css'>
+        <link href="css/jquery-ui.css" rel="stylesheet" type="text/css" />
+        <link href="stylesheets/screen.css" rel="stylesheet" type="text/css" />
+        <link href="stylesheets/ie.css" rel="stylesheet" type="text/css" />
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+        <script src='js/base.js' type='text/javascript'></script>
+    </head>
+    <body>
+        <header>
+            <div class="navbar">
+                <nav>
+                </nav>   
+                <div class="login"><?php $this->element('users/login'); ?></div>
+            </div> 
+        </header>
+        <section>
+            <?php
+            if (file_exists($pathToView)) {
+                include($pathToView);
+            }
+            ?>
+        </section>
+    </div>
+    <div id="dialog">
+    </div>
+    <div id="debug" style="display: none;">
+        <div class="tabs">
+            <ul>
+                <li><a href='#tabs-server'>Server</a></li>
+                <li><a href='#tabs-included-files'>Included files</a></li>
+                <li><a href='#tabs-post'>Post</a></li>
+                <li><a href='#tabs-files'>Files</a></li>
+                <li><a href='#tabs-sessions'>Sessions</a></li>
+                <li><a href='#tabs-cookies'>Cookies</a></li>
+            </ul>
+            <div id='tabs-server'>
+                <pre>
+                    <?php print_r($_SERVER); ?>
+                </pre>
+            </div>
+            <div id='tabs-included-files'>
+                <pre>
+                    <?php print_r(get_included_files()); ?>
+                </pre>
+            </div>
+            <div id='tabs-post'>
+                <pre>
+                    <?php print_r($_POST); ?>
+                </pre>
+            </div>
+            <div id='tabs-files'>
+                <pre>
+                    <?php print_r($_FILES); ?>
+                </pre>
+            </div>
+            <div id='tabs-sessions'>
+                <pre>
+                    <?php print_r($_SESSION); ?>
+                </pre>
+            </div>
+            <div id='tabs-cookies'>
+                <pre>
+                    <?php print_r($_COOKIE); ?>
+                </pre>
+            </div>
+        </div>
+    </div>
+    <a class='show_debug' href='javascript:void(0);' style='position: fixed; right: 10px'>Debug</a>    
+</body>
+</html>

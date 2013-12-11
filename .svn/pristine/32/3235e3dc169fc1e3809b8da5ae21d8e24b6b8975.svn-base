@@ -1,0 +1,4 @@
+<?php
+
+// Directory seperator
+define('DS', DIRECTORY_SEPARATOR);

@@ -1,0 +1,65 @@
+<?php
+
+class UsersController extends Controller {
+
+    public function index() {
+        $user = new UserModel(1);
+        debug($user);
+
+        echo $user->email;
+    }
+
+    public function validate_email() {
+        if (is('post')) {
+            $email = $_POST['email'];
+            echo json_encode(['valid' => (bool) filter_var($email, FILTER_VALIDATE_EMAIL)]);
+        }
+    }
+
+    /**
+     * users/login
+     * Check if the user is already logged in. If true redirect the user to the index.
+     * Then check if there is something posted to the server and search for the user with the given credentials.
+     * If the user filled in the correct credentials log the user in, and insert a new login.
+     * @return view
+     */
+    public function login() {
+        if (isset($_SESSION['user_id'])) {
+            return $this->redirect('users/index');
+        }
+
+        if (is('post')) {
+            $email = $_POST['email'];
+            $password = encrypt($_POST['password']);
+            $user = new UserModel();
+            $user->find(array(
+                'conditions' => array(
+                    'email' => $email,
+                    'password' => $password
+                )
+            ));
+            if ($user->id) {
+                $userLogin = new UserLogin();
+                $userLogin->setIp($_SERVER['REMOTE_ADDR'])
+                        ->setTimestamp(date(TIMESTAMP_FORMAT));
+                $userLogin->create()->save();
+                $_SESSION['users_id'] = $user->id;
+            }
+            else {
+                return $this->view->render('users/login_failed');
+            }
+        }
+
+        return $this->view->render();
+    }
+
+    public function register() {
+        if (is('post')) {
+            
+        }
+
+        return $this->view->render();
+    }
+
+}
+

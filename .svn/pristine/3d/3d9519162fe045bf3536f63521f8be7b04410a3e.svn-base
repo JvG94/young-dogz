@@ -1,0 +1,115 @@
+<?php
+
+class UsersController extends Controller {
+
+    public function index() {
+        $user = new UserModel(1);
+        debug($user);
+
+        echo $user->email;
+    }
+
+    /**
+     * If the posted email is unique and it is an valid email. Returns "valid" true or false in JSON.
+     */
+    public function unique_email() {
+        if (is('post')) {
+            $email = $_POST['email'];
+            $valid = true;
+            if (is_email($email)) {
+                if (!$this->is_unique($email)) {
+                    $valid = false;
+                }
+            }
+            else {
+                $valid = false;
+            }
+
+            echo json_encode(['valid' => $valid]);
+        }
+    }
+
+    /**
+     * If the email is valid. Returns "valid" true or false in JSON.
+     */
+    public function validate_email() {
+        if (is('post')) {
+            $email = $_POST['email'];
+            echo json_encode(['valid' => is_email($email)]);
+        }
+    }
+
+    /**
+     * users/login
+     * Check if the user is already logged in. If true redirect the user to the index.
+     * Then check if there is something posted to the server and search for the user with the given credentials.
+     * If the user filled in the correct credentials log the user in, and insert a new login.
+     * @return view
+     */
+    public function login() {
+        if (isset($_SESSION['user_id'])) {
+            return $this->redirect('users/index');
+        }
+
+        if (is('post')) {
+            $email = $_POST['email'];
+            $password = encrypt($_POST['password']);
+            $user = new UserModel();
+            $user->find(array(
+                'conditions' => array(
+                    'email' => $email,
+                    'password' => $password
+                )
+            ));
+            if ($user->id) {
+                $userLogin = new UserLogin();
+                $userLogin->setIp($_SERVER['REMOTE_ADDR'])
+                        ->setTimestamp(date(TIMESTAMP_FORMAT));
+                $userLogin->create()->save();
+                $_SESSION['users_id'] = $user->id;
+            }
+            else {
+                return $this->view->render('users/login_failed');
+            }
+        }
+
+        return $this->view->render();
+    }
+
+    public function register() {
+        if (is('post')) {
+
+            $user = new UserModel();
+
+            $user->email = $_POST['email'];
+            $user->firstName = $_POST['firstName'];
+            $user->insertion = $_POST['insertion'];
+            $user->lastName = $_POST['lastName'];
+            $user->gender = $_POST['gender'];
+            $user->city = $_POST['city'];
+            $user->postalCode = $_POST['postalCode'];
+            $user->address = $_POST['address'];
+            $user->phone = $_POST['phone'];
+            $user->newsletter = $_POST['newsletter'];
+            
+            $user->modified = date('Y-m-d H:i:s');
+
+            $user->create();
+            if ($user->update()) {
+                return $this->view->element('users/register_success');
+            }
+
+            return $this->view->element('users/register_failed');
+        }
+
+        return $this->view->render();
+    }
+
+    private function is_unique($email) {
+        $user = new UserModel();
+        $user->find(['conditions' => ['email' => $email]]);
+        return (bool) !$user->id;
+    }
+
+}
+

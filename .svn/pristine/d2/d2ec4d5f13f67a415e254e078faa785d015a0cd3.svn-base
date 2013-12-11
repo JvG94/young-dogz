@@ -1,0 +1,1 @@
+U bent succesvol geregistreerd. U heeft op uw e-mailadres een wachtwoord ontvangen. Hiermee kunt u inloggen op onze website en reserveringen plaatsen.

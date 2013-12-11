@@ -1,0 +1,1 @@
+Er is iets misgegaan met het registreren. Ga terug en probeer het nogmaals of klik <a href="users/register">hier</a>.
